@@ -1,0 +1,148 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// CABEÇALHO
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cor-texto-principal);
+  }
+
+  .header-data {
+    background: var(--cor-branco);
+    padding: 8px 16px;
+    border-radius: var(--borda-radius);
+    box-shadow: var(--sombra-card);
+    color: var(--cor-texto-secundario);
+    font-size: 13px;
+  }
+}
+
+// SAUDAÇÃO
+.saudacao {
+  background: linear-gradient(135deg, var(--cor-primaria), #1D4ED8);
+  color: white;
+  padding: 28px 32px;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: white;
+  }
+
+  p {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    max-width: 500px;
+  }
+}
+
+// MÉTRICAS
+.metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+// CONTEÚDO INFERIOR
+.conteudo-inferior {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 24px;
+}
+
+// GRÁFICO
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.grafico {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 160px;
+  padding-top: 24px;
+}
+
+.barra-grupo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex: 1;
+  height: 100%;
+}
+
+.barra-valor {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cor-texto-secundario);
+}
+
+.barra {
+  width: 100%;
+  background: var(--cor-primaria);
+  border-radius: 4px 4px 0 0;
+  min-height: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #1D4ED8;
+    opacity: 0.9;
+  }
+}
+
+.barra-label {
+  font-size: 12px;
+  color: var(--cor-texto-secundario);
+}
+
+// TABELA
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cor-texto-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 12px 12px 12px;
+    border-bottom: 1px solid var(--cor-borda);
+  }
+
+  td {
+    padding: 14px 12px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--cor-borda);
+    color: var(--cor-texto-principal);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: #F8FAFC;
+  }
+}

@@ -1,0 +1,82 @@
+<div class="dashboard">
+
+  <!-- CABEÇALHO -->
+  <div class="dashboard-header">
+    <div class="header-texto">
+      <h1>Dashboard</h1>
+      <p class="texto-muted">Acompanhe os dados de pagamentos dos seus clientes</p>
+    </div>
+    <div class="header-data">
+      <span>📅 Março 2025</span>
+    </div>
+  </div>
+
+  <!-- SAUDAÇÃO -->
+  <div class="card saudacao">
+    <div class="saudacao-texto">
+      <h2>Olá, Renato! 👋</h2>
+      <p>Acompanhe aqui os status dos pagamentos, seus clientes e mantenha atualizado a lista de clientes e informações para contato.</p>
+    </div>
+  </div>
+
+  <!-- CARDS DE MÉTRICAS -->
+  <div class="metricas-grid">
+    @for (m of metricas; track m.titulo) {
+      <app-metric-card
+        [titulo]="m.titulo"
+        [valor]="m.valor"
+        [tipo]="m.tipo"
+        [icone]="m.icone"
+      />
+    }
+  </div>
+
+  <!-- CONTEÚDO INFERIOR -->
+  <div class="conteudo-inferior">
+
+    <!-- GRÁFICO -->
+    <div class="card grafico-card">
+      <div class="card-header">
+        <h3>Evolução de Pagamentos</h3>
+        <span class="texto-muted">Últimos 6 meses</span>
+      </div>
+      <div class="grafico">
+        @for (mes of meses; track mes; let i = $index) {
+          <div class="barra-grupo">
+            <span class="barra-valor">{{ pagamentosPorMes[i] }}</span>
+            <div class="barra" [style.height]="getAltura(pagamentosPorMes[i])"></div>
+            <span class="barra-label">{{ mes }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- TABELA RECENTES -->
+    <div class="card tabela-card">
+      <div class="card-header">
+        <h3>Clientes Recentes</h3>
+      </div>
+      <table class="tabela">
+       <thead>
+  <tr>
+    <th>Cliente</th>
+    <th>Vencimento</th>
+    <th>Status</th>
+  </tr>
+</thead>
+<tbody>
+  @for (cliente of clientesRecentes; track cliente.nome) {
+    <tr>
+      <td>{{ cliente.nome }}</td>
+      <td>{{ cliente.vencimento }}</td>
+      <td>
+        <app-status-badge [status]="cliente.status" />
+      </td>
+    </tr>
+  }
+</tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

@@ -1,1 +1,98 @@
-/* You can add global styles to this file, and also import other style files */
+// ===================================
+// VARIÁVEIS GLOBAIS — Atletas em Foco
+// ===================================
+
+:root {
+  // Cores principais
+  --cor-primaria: #2563EB;
+  --cor-sidebar: #1E3A5F;
+  --cor-sidebar-hover: #2A4F7C;
+
+  // Status de pagamento
+  --cor-pago: #16A34A;
+  --cor-pendente: #EAB308;
+  --cor-atrasado: #DC2626;
+
+  // Backgrounds
+  --cor-fundo: #F1F5F9;
+  --cor-branco: #FFFFFF;
+  --cor-borda: #E2E8F0;
+
+  // Textos
+  --cor-texto-principal: #1E293B;
+  --cor-texto-secundario: #64748B;
+  --cor-texto-claro: #FFFFFF;
+
+  // Sombras
+  --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --sombra-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  // Bordas
+  --borda-radius: 8px;
+  --borda-radius-grande: 12px;
+}
+
+// ===================================
+// RESET E BASE
+// ===================================
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+// ===================================
+// UTILITÁRIOS GLOBAIS
+// ===================================
+
+.texto-sucesso { color: var(--cor-pago); }
+.texto-aviso   { color: var(--cor-pendente); }
+.texto-erro    { color: var(--cor-atrasado); }
+.texto-muted   { color: var(--cor-texto-secundario); }
+
+.card {
+  background: var(--cor-branco);
+  border-radius: var(--borda-radius-grande);
+  box-shadow: var(--sombra-card);
+  padding: 24px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--borda-radius);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primario {
+  background: var(--cor-primaria);
+  color: white;
+  padding: 10px 20px;
+
+  &:hover {
+    background: #1D4ED8;
+    box-shadow: var(--sombra-hover);
+  }
+}
+
+.btn-secundario {
+  background: transparent;
+  color: var(--cor-primaria);
+  border: 1px solid var(--cor-primaria) !important;
+  padding: 10px 20px;
+
+  &:hover {
+    background: #EFF6FF;
+  }
+}

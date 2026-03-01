@@ -1,0 +1,144 @@
+<div class="clientes">
+
+  <!-- CABEÇALHO -->
+  <div class="page-header">
+    <div>
+      <h1>Clientes</h1>
+      <p class="texto-muted">Gerencie os clientes do seu espaço esportivo</p>
+    </div>
+  </div>
+
+  <!-- CARDS DE MÉTRICAS -->
+  <div class="metricas-grid">
+    <app-metric-card titulo="Total"    [valor]="clientes.length" tipo="receita"  icone="👥" />
+    <app-metric-card titulo="Ativos"   [valor]="totalAtivos"     tipo="pago"     icone="✅" />
+    <app-metric-card titulo="Inativos" [valor]="totalInativos"   tipo="atrasado" icone="🔴" />
+  </div>
+
+  <!-- BARRA DE AÇÕES -->
+  <div class="card acoes-bar">
+    <input
+      class="input-busca"
+      type="text"
+      placeholder="🔍 Buscar por nome ou CPF..."
+      [(ngModel)]="busca"
+    />
+    <button class="btn-primario" (click)="abrirModalNovo()">
+      + Novo Cliente
+    </button>
+  </div>
+
+  <!-- TABELA -->
+  <div class="card">
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>WhatsApp</th>
+          <th>Nascimento</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cliente of clientesFiltrados; track cliente.id) {
+          <tr>
+            <td>
+              <div class="cliente-nome">
+                <div class="avatar">{{ cliente.nome[0] }}</div>
+                {{ cliente.nome }}
+              </div>
+            </td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.whatsapp }}</td>
+            <td>{{ cliente.dataNascimento }}</td>
+            <td>
+              <span class="badge" [ngClass]="cliente.ativo ? 'ativo' : 'inativo'">
+                {{ cliente.ativo ? '✅ Ativo' : '⛔ Inativo' }}
+              </span>
+            </td>
+            <td>
+              <div class="acoes">
+                <button class="btn-acao editar" (click)="abrirModalEdicao(cliente)">
+                  ✏️ Editar
+                </button>
+                <button class="btn-acao" [ngClass]="cliente.ativo ? 'inativar' : 'ativar'"
+                  (click)="toggleAtivo(cliente)">
+                  {{ cliente.ativo ? '⛔ Inativar' : '✅ Ativar' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+
+        @empty {
+          <tr>
+            <td colspan="6" class="tabela-vazia">
+              Nenhum cliente encontrado.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- MODAL DE CADASTRO / EDIÇÃO -->
+@if (modalAberto) {
+  <div class="modal-overlay" (click)="fecharModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h3>{{ modoEdicao ? '✏️ Editar Cliente' : '➕ Novo Cliente' }}</h3>
+        <button class="btn-fechar" (click)="fecharModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-grupo">
+          <label>Nome completo *</label>
+          <input type="text" [(ngModel)]="clienteForm.nome" placeholder="Ex: João da Silva" />
+        </div>
+
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label>CPF *</label>
+            <input type="text" [(ngModel)]="clienteForm.cpf"
+              (input)="formatarCPF($event)"
+              placeholder="000.000.000-00" />
+          </div>
+          <div class="form-grupo">
+            <label>Data de Nascimento</label>
+            <input type="text" [(ngModel)]="clienteForm.dataNascimento"
+              (input)="formatarData($event)"
+              placeholder="DD/MM/AAAA" />
+          </div>
+        </div>
+
+        <div class="form-grupo">
+          <label>WhatsApp *</label>
+          <input type="text" [(ngModel)]="clienteForm.whatsapp"
+            (input)="formatarWhatsApp($event)"
+            placeholder="(00) 00000-0000" />
+        </div>
+
+        <div class="form-grupo">
+          <label>Status</label>
+          <select [(ngModel)]="clienteForm.ativo">
+            <option [ngValue]="true">Ativo</option>
+            <option [ngValue]="false">Inativo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secundario" (click)="fecharModal()">Cancelar</button>
+        <button class="btn-primario" (click)="salvarCliente()">
+          {{ modoEdicao ? 'Salvar alterações' : 'Cadastrar cliente' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

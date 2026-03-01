@@ -1,0 +1,246 @@
+.clientes {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// CABEÇALHO
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+// MÉTRICAS
+.metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+// BARRA DE AÇÕES
+.acoes-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+}
+
+.input-busca {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--borda-radius);
+  padding: 10px 16px;
+  font-size: 14px;
+  width: 320px;
+  outline: none;
+  transition: border 0.2s;
+
+  &:focus {
+    border-color: var(--cor-primaria);
+  }
+}
+
+// TABELA
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cor-texto-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0 16px 12px 16px;
+    border-bottom: 1px solid var(--cor-borda);
+  }
+
+  td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--cor-borda);
+    color: var(--cor-texto-principal);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: #F8FAFC;
+  }
+}
+
+.tabela-vazia {
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  padding: 40px !important;
+}
+
+// AVATAR
+.cliente-nome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+// BADGES
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+
+  &.ativo {
+    background: #DCFCE7;
+    color: #16A34A;
+  }
+
+  &.inativo {
+    background: #FEE2E2;
+    color: #DC2626;
+  }
+}
+
+// BOTÕES DE AÇÃO
+.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-acao {
+  padding: 6px 12px;
+  border-radius: var(--borda-radius);
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+
+  &.editar {
+    background: #EFF6FF;
+    color: var(--cor-primaria);
+    &:hover { background: #DBEAFE; }
+  }
+
+  &.inativar {
+    background: #FEE2E2;
+    color: #DC2626;
+    &:hover { background: #FECACA; }
+  }
+
+  &.ativar {
+    background: #DCFCE7;
+    color: #16A34A;
+    &:hover { background: #BBF7D0; }
+  }
+}
+
+// MODAL
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: var(--borda-radius-grande);
+  width: 480px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0 24px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.btn-fechar {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--cor-texto-secundario);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  &:hover { background: var(--cor-fundo); }
+}
+
+.modal-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cor-texto-principal);
+  }
+
+  input, select {
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--borda-radius);
+    padding: 10px 14px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+    width: 100%;
+
+    &:focus {
+      border-color: var(--cor-primaria);
+    }
+  }
+}
+
+.form-linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 24px 24px 24px;
+}
