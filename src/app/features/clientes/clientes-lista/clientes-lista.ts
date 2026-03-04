@@ -1,16 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MetricCard } from '../../../shared/components/metric-card/metric-card';
-
-interface Cliente {
-  id: number;
-  nome: string;
-  cpf: string;
-  whatsapp: string;
-  dataNascimento: string;
-  ativo: boolean;
-}
+import { ClienteService, Cliente } from '../../../core/services/cliente';
 
 @Component({
   selector: 'app-clientes-lista',
@@ -19,73 +11,44 @@ interface Cliente {
   templateUrl: './clientes-lista.html',
   styleUrl: './clientes-lista.scss'
 })
-export class ClientesLista {
+export class ClientesLista implements OnInit {
 
   busca: string = '';
   modalAberto = false;
   modoEdicao = false;
+  carregando = false;
+  clientes: Cliente[] = [];
 
-  clientes: Cliente[] = [
-    { id: 1, nome: 'Renato William',  cpf: '123.456.789-00', whatsapp: '(85) 99999-0001', dataNascimento: '15/04/1990', ativo: true  },
-    { id: 2, nome: 'Kelvin Vaz',      cpf: '234.567.890-11', whatsapp: '(85) 99999-0002', dataNascimento: '22/07/1995', ativo: true  },
-    { id: 3, nome: 'Gabriel',   cpf: '345.678.901-22', whatsapp: '(85) 99999-0003', dataNascimento: '03/11/1988', ativo: true  },
-    { id: 4, nome: 'João Pedro',      cpf: '456.789.012-33', whatsapp: '(85) 99999-0004', dataNascimento: '18/02/1993', ativo: true  },
-    { id: 5, nome: 'Wesnei',    cpf: '567.890.123-44', whatsapp: '(85) 99999-0005', dataNascimento: '30/09/1997', ativo: false },
-  ];
-
-  clienteForm: Omit<Cliente, 'id'> = {
-    nome: '', cpf: '', whatsapp: '', dataNascimento: '', ativo: true
-  };
+clienteForm: Cliente = {
+  nome: '', cpf: '', whatsapp: '', data_nascimento: '', dia_vencimento: undefined, ativo: true
+};
 
   clienteEditandoId: number | null = null;
 
-  // ================================
-  // FORMATAÇÕES AUTOMÁTICAS
-  // ================================
+  constructor(
+    private clienteService: ClienteService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  formatarCPF(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let valor = input.value.replace(/\D/g, ''); // remove tudo que não é número
-    if (valor.length > 11) valor = valor.slice(0, 11);
-
-    if (valor.length <= 3)       valor = valor;
-    else if (valor.length <= 6)  valor = valor.slice(0,3) + '.' + valor.slice(3);
-    else if (valor.length <= 9)  valor = valor.slice(0,3) + '.' + valor.slice(3,6) + '.' + valor.slice(6);
-    else                         valor = valor.slice(0,3) + '.' + valor.slice(3,6) + '.' + valor.slice(6,9) + '-' + valor.slice(9);
-
-    this.clienteForm.cpf = valor;
-    input.value = valor;
+  ngOnInit() {
+    this.carregarClientes();
   }
 
-  formatarWhatsApp(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let valor = input.value.replace(/\D/g, '');
-    if (valor.length > 11) valor = valor.slice(0, 11);
-
-    if (valor.length <= 2)       valor = '(' + valor;
-    else if (valor.length <= 7)  valor = '(' + valor.slice(0,2) + ') ' + valor.slice(2);
-    else                         valor = '(' + valor.slice(0,2) + ') ' + valor.slice(2,7) + '-' + valor.slice(7);
-
-    this.clienteForm.whatsapp = valor;
-    input.value = valor;
+  carregarClientes() {
+    this.carregando = true;
+    this.clienteService.listar(this.busca).subscribe({
+      next: (dados) => {
+        console.log('Clientes recebidos:', dados);
+        this.clientes = [...dados];
+        this.carregando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar clientes', err);
+        this.carregando = false;
+      }
+    });
   }
-
-  formatarData(event: Event) {
-    const input = event.target as HTMLInputElement;
-    let valor = input.value.replace(/\D/g, '');
-    if (valor.length > 8) valor = valor.slice(0, 8);
-
-    if (valor.length <= 2)      valor = valor;
-    else if (valor.length <= 4) valor = valor.slice(0,2) + '/' + valor.slice(2);
-    else                        valor = valor.slice(0,2) + '/' + valor.slice(2,4) + '/' + valor.slice(4);
-
-    this.clienteForm.dataNascimento = valor;
-    input.value = valor;
-  }
-
-  // ================================
-  // LÓGICA DE LISTAGEM
-  // ================================
 
   get clientesFiltrados() {
     return this.clientes.filter(c =>
@@ -97,15 +60,18 @@ export class ClientesLista {
   get totalAtivos()   { return this.clientes.filter(c => c.ativo).length; }
   get totalInativos() { return this.clientes.filter(c => !c.ativo).length; }
 
-  abrirModalNovo() {
-    this.modoEdicao = false;
-    this.clienteForm = { nome: '', cpf: '', whatsapp: '', dataNascimento: '', ativo: true };
-    this.modalAberto = true;
-  }
+abrirModalNovo() {
+  this.modoEdicao = false;
+  this.clienteEditandoId = null;
+  this.clienteForm = {
+    nome: '', cpf: '', whatsapp: '', data_nascimento: '', dia_vencimento: undefined, ativo: true
+  };
+  this.modalAberto = true;
+}
 
   abrirModalEdicao(cliente: Cliente) {
     this.modoEdicao = true;
-    this.clienteEditandoId = cliente.id;
+    this.clienteEditandoId = cliente.id!;
     this.clienteForm = { ...cliente };
     this.modalAberto = true;
   }
@@ -114,21 +80,67 @@ export class ClientesLista {
     if (!this.clienteForm.nome || !this.clienteForm.cpf) return;
 
     if (this.modoEdicao && this.clienteEditandoId !== null) {
-      const index = this.clientes.findIndex(c => c.id === this.clienteEditandoId);
-      this.clientes[index] = { id: this.clienteEditandoId, ...this.clienteForm };
+      this.clienteService.atualizar(this.clienteEditandoId, this.clienteForm).subscribe({
+        next: () => { this.carregarClientes(); this.fecharModal(); },
+        error: (err) => console.error('Erro ao atualizar', err)
+      });
     } else {
-      const novoId = Math.max(...this.clientes.map(c => c.id)) + 1;
-      this.clientes.push({ id: novoId, ...this.clienteForm });
+      this.clienteService.criar(this.clienteForm).subscribe({
+        next: () => { this.carregarClientes(); this.fecharModal(); },
+        error: (err) => console.error('Erro ao criar', err)
+      });
     }
-    this.fecharModal();
   }
 
-  toggleAtivo(cliente: Cliente) {
-    cliente.ativo = !cliente.ativo;
-  }
+  excluirCliente(cliente: Cliente) {
+  if (!confirm(`Tem certeza que deseja excluir ${cliente.nome}?`)) return;
+  this.clienteService.inativar(cliente.id!).subscribe({
+    next: () => this.carregarClientes(),
+    error: (err) => console.error('Erro ao excluir', err)
+  });
+}
 
   fecharModal() {
     this.modalAberto = false;
     this.clienteEditandoId = null;
   }
+
+  // FORMATAÇÕES
+  formatarCPF(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '');
+    if (valor.length > 11) valor = valor.slice(0, 11);
+    if (valor.length <= 3)       valor = valor;
+    else if (valor.length <= 6)  valor = valor.slice(0,3) + '.' + valor.slice(3);
+    else if (valor.length <= 9)  valor = valor.slice(0,3) + '.' + valor.slice(3,6) + '.' + valor.slice(6);
+    else                         valor = valor.slice(0,3) + '.' + valor.slice(3,6) + '.' + valor.slice(6,9) + '-' + valor.slice(9);
+    this.clienteForm.cpf = valor;
+    input.value = valor;
+  }
+
+  formatarWhatsApp(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '');
+    if (valor.length > 11) valor = valor.slice(0, 11);
+    if (valor.length <= 2)       valor = '(' + valor;
+    else if (valor.length <= 7)  valor = '(' + valor.slice(0,2) + ') ' + valor.slice(2);
+    else                         valor = '(' + valor.slice(0,2) + ') ' + valor.slice(2,7) + '-' + valor.slice(7);
+    this.clienteForm.whatsapp = valor;
+    input.value = valor;
+  }
+
+  formatarData(event: Event) {
+    const input = event.target as HTMLInputElement;
+    let valor = input.value.replace(/\D/g, '');
+    if (valor.length > 8) valor = valor.slice(0, 8);
+    if (valor.length <= 2)      valor = valor;
+    else if (valor.length <= 4) valor = valor.slice(0,2) + '/' + valor.slice(2);
+    else                        valor = valor.slice(0,2) + '/' + valor.slice(2,4) + '/' + valor.slice(4);
+    this.clienteForm.data_nascimento = valor;
+    input.value = valor;
+  }
+
+  diasVencimento = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                    16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28];
 }
+

@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MetricCard } from '../../../shared/components/metric-card/metric-card';
 import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
+import { DashboardService } from '../../../core/services/dashboard';
+import { ClienteService } from '../../../core/services/cliente';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,27 +12,59 @@ import { StatusBadge } from '../../../shared/components/status-badge/status-badg
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
 
-  // Dados mockados — depois virão da API
   metricas = [
-    { titulo: 'Pagos',     valor: 50,        tipo: 'pago'     as const, icone: '✅' },
-    { titulo: 'Pendentes', valor: 40,        tipo: 'pendente' as const, icone: '⏳' },
-    { titulo: 'Atrasados', valor: 10,        tipo: 'atrasado' as const, icone: '🔴' },
-    { titulo: 'Receita',   valor: 'R$3.000', tipo: 'receita'  as const, icone: '💰' },
+    { titulo: 'Pagos',     valor: 0,    tipo: 'pago'     as const, icone: '✅' },
+    { titulo: 'Pendentes', valor: 0,    tipo: 'pendente' as const, icone: '⏳' },
+    { titulo: 'Atrasados', valor: 0,    tipo: 'atrasado' as const, icone: '🔴' },
+    { titulo: 'Receita',   valor: 'R$0', tipo: 'receita' as const, icone: '💰' },
   ];
 
-clientesRecentes = [
-  { nome: 'Renato William',    vencimento: '05/03/2025', status: 'pago'     as const },
-  { nome: 'Kelvin Vaz', vencimento: '08/03/2025', status: 'pendente' as const },
-  { nome: 'Gabriel',  vencimento: '01/03/2025', status: 'atrasado' as const },
-  { nome: 'João Pedro',     vencimento: '10/03/2025', status: 'pago'     as const },
-  { nome: 'Wesney',  vencimento: '03/03/2025', status: 'atrasado' as const },
-];
+  clientesRecentes: any[] = [];
+  meses: string[] = [];
+  pagamentosPorMes: number[] = [];
+  maiorValor = 0;
 
-  meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
-  pagamentosPorMes = [38, 42, 50, 45, 48, 50];
-  maiorValor = Math.max(...this.pagamentosPorMes);
+  constructor(
+    private dashboardService: DashboardService,
+    private clienteService: ClienteService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit() {
+    this.carregarResumo();
+    this.carregarClientesRecentes();
+  }
+
+  carregarResumo() {
+    this.dashboardService.resumo().subscribe({
+      next: (dados) => {
+        this.metricas[0].valor = dados.pagos;
+        this.metricas[1].valor = dados.pendentes;
+        this.metricas[2].valor = dados.atrasados;
+        this.metricas[3].valor = `R$${dados.receita.toLocaleString('pt-BR')}`;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar resumo', err)
+    });
+  }
+
+  carregarClientesRecentes() {
+    this.clienteService.listar().subscribe({
+      next: (clientes) => {
+        this.clientesRecentes = clientes.slice(0, 5).map(c => ({
+          nome: c.nome,
+          vencimento: c.created_at
+            ? new Date(c.created_at).toLocaleDateString('pt-BR')
+            : '—',
+          status: c.ativo ? 'pago' : 'atrasado'
+        }));
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar clientes', err)
+    });
+  }
 
   getAltura(valor: number): string {
     return `${(valor / this.maiorValor) * 100}%`;

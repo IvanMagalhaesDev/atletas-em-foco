@@ -143,17 +143,11 @@
     &:hover { background: #DBEAFE; }
   }
 
-  &.inativar {
-    background: #FEE2E2;
-    color: #DC2626;
-    &:hover { background: #FECACA; }
-  }
-
-  &.ativar {
-    background: #DCFCE7;
-    color: #16A34A;
-    &:hover { background: #BBF7D0; }
-  }
+  &.excluir {
+  background: #FEE2E2;
+  color: #DC2626;
+  &:hover { background: #FECACA; }
+}
 }
 
 // MODAL

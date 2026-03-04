@@ -21,14 +21,14 @@
     <div class="filtros-esquerda">
       <span class="filtros-label">🔍 Filtrar por:</span>
 
-      <select [(ngModel)]="filtroMes">
+      <select [(ngModel)]="filtroMes" (change)="filtrar()">
         <option value="">Todos os meses</option>
         @for (mes of meses; track mes.valor) {
           <option [value]="mes.valor">{{ mes.label }}</option>
         }
       </select>
 
-      <select [(ngModel)]="filtroStatus">
+      <select [(ngModel)]="filtroStatus" (change)="filtrar()">
         <option value="">Todos os status</option>
         <option value="pago">✅ Pago</option>
         <option value="pendente">⏳ Pendente</option>
@@ -62,23 +62,20 @@
           <tr>
             <td>
               <div class="cliente-nome">
-                <div class="avatar">{{ p.cliente[0] }}</div>
-                {{ p.cliente }}
+                <div class="avatar">{{ getNomeCliente(p.cliente_id)[0] }}</div>
+                {{ getNomeCliente(p.cliente_id) }}
               </div>
             </td>
-            <td>{{ p.vencimento }}</td>
-            <td>{{ p.dataPagamento ?? '—' }}</td>
+            <td>{{ p.data_vencimento }}</td>
+            <td>{{ p.data_pagamento ?? '—' }}</td>
             <td>R$ {{ p.valor }},00</td>
-            <td><app-status-badge [status]="p.status" /></td>
-            <td>
-              @if (p.validadoPor === 'auto') {
+<td><app-status-badge [status]="getStatus(p.status)" /></td>              @if (p.validado_por === 'auto') {
                 <span class="badge-validacao auto">🤖 Automático</span>
-              } @else if (p.validadoPor === 'admin') {
+              } @else if (p.validado_por === 'admin') {
                 <span class="badge-validacao admin">👤 Admin</span>
               } @else {
                 <span class="texto-muted">—</span>
               }
-            </td>
             <td>
               @if (p.status !== 'pago') {
                 <button class="btn-confirmar" (click)="confirmarPagamento(p)">
@@ -94,7 +91,7 @@
         @empty {
           <tr>
             <td colspan="7" class="tabela-vazia">
-              Nenhum pagamento encontrado para os filtros selecionados.
+              Nenhum pagamento encontrado.
             </td>
           </tr>
         }
