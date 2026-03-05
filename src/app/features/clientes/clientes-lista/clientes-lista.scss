@@ -238,3 +238,13 @@
   gap: 12px;
   padding: 0 24px 24px 24px;
 }
+
+.alerta-sucesso {
+  background: #DCFCE7;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+  border-radius: var(--borda-radius);
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+}

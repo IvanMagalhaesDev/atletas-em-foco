@@ -5,9 +5,7 @@ import { Observable } from 'rxjs';
 export interface Cliente {
   id?: number;
   nome: string;
-  cpf: string;
-  whatsapp: string;
-  data_nascimento?: string;
+  telefone: string;
   dia_vencimento?: number;
   ativo: boolean;
   created_at?: string;

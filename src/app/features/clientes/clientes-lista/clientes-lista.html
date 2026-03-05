@@ -8,6 +8,11 @@
     </div>
   </div>
 
+  <!-- MENSAGEM DE SUCESSO -->
+  @if (mensagemSucesso) {
+    <div class="alerta-sucesso">{{ mensagemSucesso }}</div>
+  }
+
   <!-- CARDS DE MÉTRICAS -->
   <div class="metricas-grid">
     <app-metric-card titulo="Total"    [valor]="clientes.length" tipo="receita"  icone="👥" />
@@ -20,7 +25,7 @@
     <input
       class="input-busca"
       type="text"
-      placeholder="🔍 Buscar por nome ou CPF..."
+      placeholder="🔍 Buscar por nome..."
       [(ngModel)]="busca"
     />
     <button class="btn-primario" (click)="abrirModalNovo()">
@@ -34,9 +39,8 @@
       <thead>
         <tr>
           <th>Nome</th>
-          <th>CPF</th>
-          <th>WhatsApp</th>
-          <th>Nascimento</th>
+          <th>Telefone</th>
+          <th>Vencimento</th>
           <th>Status</th>
           <th>Ações</th>
         </tr>
@@ -50,30 +54,35 @@
                 {{ cliente.nome }}
               </div>
             </td>
-            <td>{{ cliente.cpf }}</td>
-            <td>{{ cliente.whatsapp }}</td>
-            <td>{{ cliente.data_nascimento }}</td>
+            <td>{{ cliente.telefone }}</td>
+            <td>
+              @if (cliente.dia_vencimento) {
+                Todo dia {{ cliente.dia_vencimento }}
+              } @else {
+                <span class="texto-muted">—</span>
+              }
+            </td>
             <td>
               <span class="badge" [ngClass]="cliente.ativo ? 'ativo' : 'inativo'">
                 {{ cliente.ativo ? '✅ Ativo' : '⛔ Inativo' }}
               </span>
             </td>
             <td>
-  <div class="acoes">
-    <button class="btn-acao editar" (click)="abrirModalEdicao(cliente)">
-      ✏️ Editar
-    </button>
-    <button class="btn-acao excluir" (click)="excluirCliente(cliente)">
-      🗑️ Excluir
-    </button>
-  </div>
-</td>
+              <div class="acoes">
+                <button class="btn-acao editar" (click)="abrirModalEdicao(cliente)">
+                  ✏️ Editar
+                </button>
+                <button class="btn-acao excluir" (click)="excluirCliente(cliente)">
+                  🗑️ Excluir
+                </button>
+              </div>
+            </td>
           </tr>
         }
 
         @empty {
           <tr>
-            <td colspan="6" class="tabela-vazia">
+            <td colspan="5" class="tabela-vazia">
               Nenhum cliente encontrado.
             </td>
           </tr>
@@ -84,7 +93,7 @@
 
 </div>
 
-<!-- MODAL DE CADASTRO / EDIÇÃO -->
+<!-- MODAL -->
 @if (modalAberto) {
   <div class="modal-overlay" (click)="fecharModal()">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -95,52 +104,37 @@
       </div>
 
       <div class="modal-body">
-  <div class="form-grupo">
-    <label>Nome completo *</label>
-    <input type="text" [(ngModel)]="clienteForm.nome" placeholder="Ex: João da Silva" />
-  </div>
+        <div class="form-grupo">
+          <label>Nome completo *</label>
+          <input type="text" [(ngModel)]="clienteForm.nome" placeholder="Ex: João da Silva" />
+        </div>
 
-  <div class="form-linha">
-    <div class="form-grupo">
-      <label>CPF *</label>
-      <input type="text" [(ngModel)]="clienteForm.cpf"
-        (input)="formatarCPF($event)"
-        placeholder="000.000.000-00" />
-    </div>
-    <div class="form-grupo">
-      <label>Data de Nascimento</label>
-      <input type="text" [(ngModel)]="clienteForm.data_nascimento"
-        (input)="formatarData($event)"
-        placeholder="DD/MM/AAAA" />
-    </div>
-  </div>
+        <div class="form-linha">
+          <div class="form-grupo">
+            <label>Telefone *</label>
+            <input type="text" [(ngModel)]="clienteForm.telefone"
+              (input)="formatarTelefone($event)"
+              placeholder="(00) 00000-0000" />
+          </div>
+          <div class="form-grupo">
+            <label>Dia de Vencimento *</label>
+            <select [(ngModel)]="clienteForm.dia_vencimento">
+              <option [ngValue]="undefined">Selecione...</option>
+              @for (dia of diasVencimento; track dia) {
+                <option [ngValue]="dia">Todo dia {{ dia }}</option>
+              }
+            </select>
+          </div>
+        </div>
 
-  <div class="form-linha">
-    <div class="form-grupo">
-      <label>WhatsApp *</label>
-      <input type="text" [(ngModel)]="clienteForm.whatsapp"
-        (input)="formatarWhatsApp($event)"
-        placeholder="(00) 00000-0000" />
-    </div>
-    <div class="form-grupo">
-      <label>Dia de Vencimento *</label>
-      <select [(ngModel)]="clienteForm.dia_vencimento">
-        <option [ngValue]="undefined">Selecione...</option>
-        @for (dia of diasVencimento; track dia) {
-          <option [ngValue]="dia">Todo dia {{ dia }}</option>
-        }
-      </select>
-    </div>
-  </div>
-
-  <div class="form-grupo">
-    <label>Status</label>
-    <select [(ngModel)]="clienteForm.ativo">
-      <option [ngValue]="true">✅ Ativo</option>
-      <option [ngValue]="false">⛔ Inativo</option>
-    </select>
-  </div>
-</div>
+        <div class="form-grupo">
+          <label>Status</label>
+          <select [(ngModel)]="clienteForm.ativo">
+            <option [ngValue]="true">✅ Ativo</option>
+            <option [ngValue]="false">⛔ Inativo</option>
+          </select>
+        </div>
+      </div>
 
       <div class="modal-footer">
         <button class="btn-secundario" (click)="fecharModal()">Cancelar</button>
