@@ -4,6 +4,7 @@ import { MetricCard } from '../../../shared/components/metric-card/metric-card';
 import { StatusBadge } from '../../../shared/components/status-badge/status-badge';
 import { DashboardService } from '../../../core/services/dashboard';
 import { ClienteService } from '../../../core/services/cliente';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,27 +15,28 @@ import { ClienteService } from '../../../core/services/cliente';
 })
 export class Dashboard implements OnInit {
 
- metricas = [
-  { titulo: 'Pagos',     valor: 0,     tipo: 'pago'     as const },
-  { titulo: 'Pendentes', valor: 0,     tipo: 'pendente' as const },
-  { titulo: 'Atrasados', valor: 0,     tipo: 'atrasado' as const },
-  { titulo: 'Receita',   valor: 'R$0', tipo: 'receita'  as const },
-];
+  metricas = [
+    { titulo: 'Pagos',     valor: 0,     tipo: 'pago'     as const },
+    { titulo: 'Pendentes', valor: 0,     tipo: 'pendente' as const },
+    { titulo: 'Atrasados', valor: 0,     tipo: 'atrasado' as const },
+    { titulo: 'Receita',   valor: 'R$0', tipo: 'receita'  as const },
+  ];
 
   clientesRecentes: any[] = [];
-  meses: string[] = [];
-  pagamentosPorMes: number[] = [];
-  maiorValor = 0;
+  graficoDados: { mes: string; total: number; receita: number }[] = [];
+  maiorReceita = 0;
 
   constructor(
     private dashboardService: DashboardService,
     private clienteService: ClienteService,
+    private http: HttpClient,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.carregarResumo();
     this.carregarClientesRecentes();
+    this.carregarGrafico();
   }
 
   carregarResumo() {
@@ -66,7 +68,25 @@ export class Dashboard implements OnInit {
     });
   }
 
-  getAltura(valor: number): string {
-    return `${(valor / this.maiorValor) * 100}%`;
+  carregarGrafico() {
+    this.http.get<any[]>('http://localhost:8000/dashboard/grafico').subscribe({
+      next: (dados) => {
+        this.graficoDados = dados;
+        this.maiorReceita = Math.max(...dados.map(d => d.receita), 1);
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao carregar gráfico', err)
+    });
+  }
+
+  getAltura(receita: number): string {
+    return `${(receita / this.maiorReceita) * 100}%`;
+  }
+
+  formatarMes(mes: string): string {
+    const [m, ano] = mes.split('/');
+    const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                       'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    return `${meses[parseInt(m)]}/${ano.slice(2)}`;
   }
 }

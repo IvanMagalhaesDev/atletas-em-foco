@@ -14,7 +14,6 @@
     transform: translateY(-2px);
   }
 
-  // Cores por tipo
   &.pago {
     border-left-color: var(--cor-pago);
     .card-icone { background: #DCFCE7; }
@@ -33,6 +32,11 @@
   &.receita {
     border-left-color: var(--cor-primaria);
     .card-icone { background: #DBEAFE; }
+  }
+
+  &.total {
+    border-left-color: #8B5CF6;
+    .card-icone { background: #EDE9FE; }
   }
 }
 

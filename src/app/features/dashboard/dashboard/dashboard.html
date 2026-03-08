@@ -31,27 +31,28 @@
   <div class="conteudo-inferior">
 
     <!-- GRÁFICO -->
-    <div class="card grafico-card">
-      <div class="card-header">
-        <h3>Evolução de Pagamentos</h3>
-        <span class="texto-muted">Últimos 6 meses</span>
-      </div>
-      @if (pagamentosPorMes.length > 0) {
-        <div class="grafico">
-          @for (mes of meses; track mes; let i = $index) {
-            <div class="barra-grupo">
-              <span class="barra-valor">{{ pagamentosPorMes[i] }}</span>
-              <div class="barra" [style.height]="getAltura(pagamentosPorMes[i])"></div>
-              <span class="barra-label">{{ mes }}</span>
-            </div>
-          }
-        </div>
-      } @else {
-        <div class="grafico-vazio">
-          <p>Nenhum dado disponível ainda</p>
+<div class="card grafico-card">
+  <div class="card-header">
+    <h3>Evolução de Pagamentos</h3>
+    <span class="texto-muted">Por mês</span>
+  </div>
+  @if (graficoDados.length > 0) {
+    <div class="grafico">
+      @for (item of graficoDados; track item.mes) {
+        <div class="barra-grupo">
+          <span class="barra-valor">R${{ item.receita }}</span>
+          <div class="barra" [style.height]="getAltura(item.receita)"></div>
+          <span class="barra-label">{{ formatarMes(item.mes) }}</span>
         </div>
       }
     </div>
+  } @else {
+    <div class="grafico-vazio">
+      <span class="material-icons">bar_chart</span>
+      <p>Nenhum dado disponível ainda</p>
+    </div>
+  }
+</div>
 
     <!-- TABELA RECENTES -->
     <div class="card tabela-card">
