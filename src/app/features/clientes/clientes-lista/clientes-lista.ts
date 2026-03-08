@@ -21,8 +21,8 @@ export class ClientesLista implements OnInit {
   clientes: Cliente[] = [];
 
   clienteForm: Cliente = {
-    nome: '', telefone: '', dia_vencimento: undefined, ativo: true
-  };
+  nome: '', telefone: '', telegram_id: undefined, dia_vencimento: undefined, ativo: true
+};
 
   clienteEditandoId: number | null = null;
 
@@ -63,11 +63,11 @@ export class ClientesLista implements OnInit {
   get totalInativos() { return this.clientes.filter(c => !c.ativo).length; }
 
   abrirModalNovo() {
-    this.modoEdicao = false;
-    this.clienteEditandoId = null;
-    this.clienteForm = { nome: '', telefone: '', dia_vencimento: undefined, ativo: true };
-    this.modalAberto = true;
-  }
+  this.modoEdicao = false;
+  this.clienteEditandoId = null;
+  this.clienteForm = { nome: '', telefone: '', telegram_id: undefined, dia_vencimento: undefined, ativo: true };
+  this.modalAberto = true;
+}
 
   abrirModalEdicao(cliente: Cliente) {
     this.modoEdicao = true;

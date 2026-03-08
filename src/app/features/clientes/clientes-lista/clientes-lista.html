@@ -117,38 +117,43 @@
         </button>
       </div>
 
-      <div class="modal-body">
-        <div class="form-grupo">
-          <label>Nome completo *</label>
-          <input type="text" [(ngModel)]="clienteForm.nome" placeholder="Ex: João da Silva" />
-        </div>
+<div class="modal-body">
+  <div class="form-grupo">
+    <label>Nome completo *</label>
+    <input type="text" [(ngModel)]="clienteForm.nome" placeholder="Ex: João da Silva" />
+  </div>
 
-        <div class="form-linha">
-          <div class="form-grupo">
-            <label>Telefone *</label>
-            <input type="text" [(ngModel)]="clienteForm.telefone"
-              (input)="formatarTelefone($event)"
-              placeholder="(00) 00000-0000" />
-          </div>
-          <div class="form-grupo">
-            <label>Dia de Vencimento *</label>
-            <select [(ngModel)]="clienteForm.dia_vencimento">
-              <option [ngValue]="undefined">Selecione...</option>
-              @for (dia of diasVencimento; track dia) {
-                <option [ngValue]="dia">Todo dia {{ dia }}</option>
-              }
-            </select>
-          </div>
-        </div>
+  <div class="form-linha">
+    <div class="form-grupo">
+      <label>Telefone *</label>
+      <input type="text" [(ngModel)]="clienteForm.telefone"
+        (input)="formatarTelefone($event)"
+        placeholder="(00) 00000-0000" />
+    </div>
+    <div class="form-grupo">
+      <label>Dia de Vencimento *</label>
+      <select [(ngModel)]="clienteForm.dia_vencimento">
+        <option [ngValue]="undefined">Selecione...</option>
+        @for (dia of diasVencimento; track dia) {
+          <option [ngValue]="dia">Todo dia {{ dia }}</option>
+        }
+      </select>
+    </div>
+  </div>
 
-        <div class="form-grupo">
-          <label>Status</label>
-          <select [(ngModel)]="clienteForm.ativo">
-            <option [ngValue]="true">Ativo</option>
-            <option [ngValue]="false">Inativo</option>
-          </select>
-        </div>
-      </div>
+  <div class="form-grupo">
+    <label>Telegram ID <span class="texto-muted">(opcional)</span></label>
+    <input type="text" [(ngModel)]="clienteForm.telegram_id" placeholder="Ex: 7207753809" />
+  </div>
+
+  <div class="form-grupo">
+    <label>Status</label>
+    <select [(ngModel)]="clienteForm.ativo">
+      <option [ngValue]="true">Ativo</option>
+      <option [ngValue]="false">Inativo</option>
+    </select>
+  </div>
+</div>
 
       <div class="modal-footer">
         <button class="btn-secundario" (click)="fecharModal()">Cancelar</button>

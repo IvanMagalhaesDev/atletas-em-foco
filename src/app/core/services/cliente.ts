@@ -6,6 +6,7 @@ export interface Cliente {
   id?: number;
   nome: string;
   telefone: string;
+  telegram_id?: string;
   dia_vencimento?: number;
   ativo: boolean;
   created_at?: string;
