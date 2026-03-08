@@ -96,3 +96,75 @@ button {
     background: #EFF6FF;
   }
 }
+
+@media (max-width: 768px) {
+
+  // ─── LAYOUT RAIZ ───────────────────────────────
+  .layout {
+    flex-direction: column !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .conteudo-principal {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding: 16px 16px 80px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  // ─── DASHBOARD ─────────────────────────────────
+  .dashboard {
+    gap: 16px !important;
+  }
+
+  .dashboard-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+
+    h1 { font-size: 20px !important; }
+
+    .header-data { display: none !important; } // pouco útil no mobile
+  }
+
+  // Saudação — remove padding excessivo
+  .saudacao {
+    padding: 20px !important;
+    border-radius: var(--borda-radius) !important;
+
+    h2 { font-size: 18px !important; }
+
+    p {
+      font-size: 13px !important;
+      max-width: 100% !important;  // ← era 500px, cortava o texto
+    }
+  }
+
+  // Métricas — 2 colunas no mobile
+  .metricas-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  // Inferior — empilha verticalmente
+  .conteudo-inferior {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  // Tabela clientes recentes — colunas menores
+  .tabela {
+    th, td {
+      padding: 10px 8px !important;
+      font-size: 13px !important;
+    }
+
+    // Esconde coluna VENCIMENTO no mobile (economiza espaço)
+    th:nth-child(2),
+    td:nth-child(2) {
+      display: none !important;
+    }
+  }
+}
