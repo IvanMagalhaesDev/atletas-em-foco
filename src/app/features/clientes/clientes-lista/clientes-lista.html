@@ -15,21 +15,25 @@
 
   <!-- CARDS DE MÉTRICAS -->
   <div class="metricas-grid">
-    <app-metric-card titulo="Total"    [valor]="clientes.length" tipo="receita"  icone="👥" />
-    <app-metric-card titulo="Ativos"   [valor]="totalAtivos"     tipo="pago"     icone="✅" />
-    <app-metric-card titulo="Inativos" [valor]="totalInativos"   tipo="atrasado" icone="🔴" />
+    <app-metric-card titulo="Total"    [valor]="clientes.length" tipo="total"    />
+    <app-metric-card titulo="Ativos"   [valor]="totalAtivos"     tipo="pago"     />
+    <app-metric-card titulo="Inativos" [valor]="totalInativos"   tipo="atrasado" />
   </div>
 
   <!-- BARRA DE AÇÕES -->
   <div class="card acoes-bar">
-    <input
-      class="input-busca"
-      type="text"
-      placeholder="🔍 Buscar por nome..."
-      [(ngModel)]="busca"
-    />
+    <div class="input-busca-wrapper">
+      <span class="material-icons icone-busca">search</span>
+      <input
+        class="input-busca"
+        type="text"
+        placeholder="Buscar por nome..."
+        [(ngModel)]="busca"
+      />
+    </div>
     <button class="btn-primario" (click)="abrirModalNovo()">
-      + Novo Cliente
+      <span class="material-icons">person_add</span>
+      Novo Cliente
     </button>
   </div>
 
@@ -64,16 +68,21 @@
             </td>
             <td>
               <span class="badge" [ngClass]="cliente.ativo ? 'ativo' : 'inativo'">
-                {{ cliente.ativo ? '✅ Ativo' : '⛔ Inativo' }}
+                <span class="material-icons" style="font-size:14px">
+                  {{ cliente.ativo ? 'check_circle' : 'cancel' }}
+                </span>
+                {{ cliente.ativo ? 'Ativo' : 'Inativo' }}
               </span>
             </td>
             <td>
               <div class="acoes">
                 <button class="btn-acao editar" (click)="abrirModalEdicao(cliente)">
-                  ✏️ Editar
+                  <span class="material-icons" style="font-size:16px">edit</span>
+                  Editar
                 </button>
                 <button class="btn-acao excluir" (click)="excluirCliente(cliente)">
-                  🗑️ Excluir
+                  <span class="material-icons" style="font-size:16px">delete</span>
+                  Excluir
                 </button>
               </div>
             </td>
@@ -99,8 +108,13 @@
     <div class="modal" (click)="$event.stopPropagation()">
 
       <div class="modal-header">
-        <h3>{{ modoEdicao ? '✏️ Editar Cliente' : '➕ Novo Cliente' }}</h3>
-        <button class="btn-fechar" (click)="fecharModal()">✕</button>
+        <h3>
+          <span class="material-icons">{{ modoEdicao ? 'edit' : 'person_add' }}</span>
+          {{ modoEdicao ? 'Editar Cliente' : 'Novo Cliente' }}
+        </h3>
+        <button class="btn-fechar" (click)="fecharModal()">
+          <span class="material-icons">close</span>
+        </button>
       </div>
 
       <div class="modal-body">
@@ -130,8 +144,8 @@
         <div class="form-grupo">
           <label>Status</label>
           <select [(ngModel)]="clienteForm.ativo">
-            <option [ngValue]="true">✅ Ativo</option>
-            <option [ngValue]="false">⛔ Inativo</option>
+            <option [ngValue]="true">Ativo</option>
+            <option [ngValue]="false">Inativo</option>
           </select>
         </div>
       </div>

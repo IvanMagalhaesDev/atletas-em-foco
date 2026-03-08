@@ -11,6 +11,16 @@ import { CommonModule } from '@angular/common';
 export class MetricCard {
   @Input() titulo: string = '';
   @Input() valor: string | number = '';
-  @Input() tipo: 'pago' | 'pendente' | 'atrasado' | 'receita' = 'pago';
-  @Input() icone: string = '';
+  @Input() tipo: 'pago' | 'pendente' | 'atrasado' | 'receita' | 'total' = 'pago';
+
+  get icone(): string {
+    const mapa: Record<string, string> = {
+      pago:     'check_circle',
+      pendente: 'schedule',
+      atrasado: 'warning',
+      receita:  'attach_money',
+      total:    'group'
+    };
+    return mapa[this.tipo] || 'info';
+  }
 }

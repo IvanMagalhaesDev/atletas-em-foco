@@ -10,16 +10,17 @@
 
   <!-- CARDS DE MÉTRICAS -->
   <div class="metricas-grid">
-    <app-metric-card titulo="Pagos"     [valor]="totalPagos"     tipo="pago"     icone="✅" />
-    <app-metric-card titulo="Pendentes" [valor]="totalPendentes" tipo="pendente" icone="⏳" />
-    <app-metric-card titulo="Atrasados" [valor]="totalAtrasados" tipo="atrasado" icone="🔴" />
-    <app-metric-card titulo="Receita"   [valor]="receitaTotal"   tipo="receita"  icone="💰" />
+    <app-metric-card titulo="Pagos"     [valor]="totalPagos"     tipo="pago"     />
+    <app-metric-card titulo="Pendentes" [valor]="totalPendentes" tipo="pendente" />
+    <app-metric-card titulo="Atrasados" [valor]="totalAtrasados" tipo="atrasado" />
+    <app-metric-card titulo="Receita"   [valor]="receitaTotal"   tipo="receita"  />
   </div>
 
   <!-- FILTROS -->
   <div class="card filtros-bar">
     <div class="filtros-esquerda">
-      <span class="filtros-label">🔍 Filtrar por:</span>
+      <span class="material-icons" style="color: var(--cor-texto-secundario)">filter_list</span>
+      <span class="filtros-label">Filtrar por:</span>
 
       <select [(ngModel)]="filtroMes" (change)="filtrar()">
         <option value="">Todos os meses</option>
@@ -30,15 +31,16 @@
 
       <select [(ngModel)]="filtroStatus" (change)="filtrar()">
         <option value="">Todos os status</option>
-        <option value="pago">✅ Pago</option>
-        <option value="pendente">⏳ Pendente</option>
-        <option value="atrasado">🔴 Atrasado</option>
+        <option value="pago">Pago</option>
+        <option value="pendente">Pendente</option>
+        <option value="atrasado">Atrasado</option>
       </select>
     </div>
 
     @if (filtroMes || filtroStatus) {
       <button class="btn-limpar" (click)="limparFiltros()">
-        ✕ Limpar filtros
+        <span class="material-icons" style="font-size:16px">close</span>
+        Limpar filtros
       </button>
     }
   </div>
@@ -69,17 +71,27 @@
             <td>{{ p.data_vencimento }}</td>
             <td>{{ p.data_pagamento ?? '—' }}</td>
             <td>R$ {{ p.valor }},00</td>
-<td><app-status-badge [status]="getStatus(p.status)" /></td>              @if (p.validado_por === 'auto') {
-                <span class="badge-validacao auto">🤖 Automático</span>
+            <td><app-status-badge [status]="getStatus(p.status)" /></td>
+            <td>
+              @if (p.validado_por === 'auto') {
+                <span class="badge-validacao auto">
+                  <span class="material-icons" style="font-size:14px">smart_toy</span>
+                  Automático
+                </span>
               } @else if (p.validado_por === 'admin') {
-                <span class="badge-validacao admin">👤 Admin</span>
+                <span class="badge-validacao admin">
+                  <span class="material-icons" style="font-size:14px">person</span>
+                  Admin
+                </span>
               } @else {
                 <span class="texto-muted">—</span>
               }
+            </td>
             <td>
               @if (p.status !== 'pago') {
                 <button class="btn-confirmar" (click)="confirmarPagamento(p)">
-                  ✅ Confirmar
+                  <span class="material-icons" style="font-size:16px">check_circle</span>
+                  Confirmar
                 </button>
               } @else {
                 <span class="texto-muted">—</span>

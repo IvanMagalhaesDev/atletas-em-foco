@@ -15,16 +15,16 @@ import { ClienteService, Cliente } from '../../../core/services/cliente';
 })
 export class PagamentosLista implements OnInit {
 
-  filtroMes: string = '';
+  filtroMes: string = this.getMesAtual();
   filtroStatus: string = '';
   carregando = false;
   pagamentos: Mensalidade[] = [];
   clientes: Cliente[] = [];
 
   meses = [
-    { valor: '03/2025', label: 'Março 2025'     },
-    { valor: '02/2025', label: 'Fevereiro 2025' },
-    { valor: '01/2025', label: 'Janeiro 2025'   },
+  { valor: '03/2026', label: 'Março 2026'     },
+  { valor: '02/2026', label: 'Fevereiro 2026' },
+  { valor: '01/2026', label: 'Janeiro 2026'   },
   ];
 
   constructor(
@@ -93,4 +93,12 @@ export class PagamentosLista implements OnInit {
     this.filtroStatus = '';
     this.carregarDados();
   }
+
+  getMesAtual(): string {
+  const agora = new Date();
+  const mes = String(agora.getMonth() + 1).padStart(2, '0');
+  const ano = agora.getFullYear();
+  return `${mes}/${ano}`;
+}
+
 }

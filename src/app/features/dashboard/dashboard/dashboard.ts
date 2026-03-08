@@ -14,12 +14,12 @@ import { ClienteService } from '../../../core/services/cliente';
 })
 export class Dashboard implements OnInit {
 
-  metricas = [
-    { titulo: 'Pagos',     valor: 0,    tipo: 'pago'     as const, icone: '✅' },
-    { titulo: 'Pendentes', valor: 0,    tipo: 'pendente' as const, icone: '⏳' },
-    { titulo: 'Atrasados', valor: 0,    tipo: 'atrasado' as const, icone: '🔴' },
-    { titulo: 'Receita',   valor: 'R$0', tipo: 'receita' as const, icone: '💰' },
-  ];
+ metricas = [
+  { titulo: 'Pagos',     valor: 0,     tipo: 'pago'     as const },
+  { titulo: 'Pendentes', valor: 0,     tipo: 'pendente' as const },
+  { titulo: 'Atrasados', valor: 0,     tipo: 'atrasado' as const },
+  { titulo: 'Receita',   valor: 'R$0', tipo: 'receita'  as const },
+];
 
   clientesRecentes: any[] = [];
   meses: string[] = [];
