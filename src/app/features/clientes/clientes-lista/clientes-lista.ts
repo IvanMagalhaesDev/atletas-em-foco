@@ -84,7 +84,7 @@ export class ClientesLista implements OnInit {
         next: () => {
           this.carregarClientes();
           this.fecharModal();
-          this.mostrarSucesso('Cliente atualizado com sucesso! ✅');
+          this.mostrarSucesso('Atleta atualizado com sucesso! ✅');
         },
         error: (err) => console.error('Erro ao atualizar', err)
       });
@@ -93,7 +93,7 @@ export class ClientesLista implements OnInit {
         next: () => {
           this.carregarClientes();
           this.fecharModal();
-          this.mostrarSucesso('Cliente cadastrado com sucesso! ✅');
+          this.mostrarSucesso('Atleta cadastrado com sucesso! ✅');
         },
         error: (err) => console.error('Erro ao criar', err)
       });
@@ -105,7 +105,7 @@ export class ClientesLista implements OnInit {
     this.clienteService.inativar(cliente.id!).subscribe({
       next: () => {
         this.carregarClientes();
-        this.mostrarSucesso('Cliente excluído com sucesso! ✅');
+        this.mostrarSucesso('Atleta excluído com sucesso! ✅');
       },
       error: (err) => console.error('Erro ao excluir', err)
     });

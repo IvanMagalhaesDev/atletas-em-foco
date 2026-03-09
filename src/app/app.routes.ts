@@ -3,7 +3,7 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
 

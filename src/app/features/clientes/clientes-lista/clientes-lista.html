@@ -3,8 +3,8 @@
   <!-- CABEÇALHO -->
   <div class="page-header">
     <div>
-      <h1>Clientes</h1>
-      <p class="texto-muted">Gerencie os clientes do seu espaço esportivo</p>
+      <h1>Atletas</h1>
+      <p class="texto-muted">Gerencie os atletas do seu espaço esportivo</p>
     </div>
   </div>
 
@@ -33,7 +33,7 @@
     </div>
     <button class="btn-primario" (click)="abrirModalNovo()">
       <span class="material-icons">person_add</span>
-      Novo Cliente
+      Novo Atleta
     </button>
   </div>
 
@@ -92,7 +92,7 @@
         @empty {
           <tr>
             <td colspan="5" class="tabela-vazia">
-              Nenhum cliente encontrado.
+              Nenhum atleta encontrado.
             </td>
           </tr>
         }
@@ -110,7 +110,7 @@
       <div class="modal-header">
         <h3>
           <span class="material-icons">{{ modoEdicao ? 'edit' : 'person_add' }}</span>
-          {{ modoEdicao ? 'Editar Cliente' : 'Novo Cliente' }}
+          {{ modoEdicao ? 'Editar Atleta' : 'Novo Atleta' }}
         </h3>
         <button class="btn-fechar" (click)="fecharModal()">
           <span class="material-icons">close</span>
@@ -158,7 +158,7 @@
       <div class="modal-footer">
         <button class="btn-secundario" (click)="fecharModal()">Cancelar</button>
         <button class="btn-primario" (click)="salvarCliente()">
-          {{ modoEdicao ? 'Salvar alterações' : 'Cadastrar cliente' }}
+          {{ modoEdicao ? 'Salvar alterações' : 'Cadastrar atleta' }}
         </button>
       </div>
 
